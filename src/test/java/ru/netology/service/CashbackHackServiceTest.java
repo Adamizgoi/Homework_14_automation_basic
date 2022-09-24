@@ -1,67 +1,62 @@
 package ru.netology.service;
 
-import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class CashbackHackServiceTest extends Assertion {
+public class CashbackHackServiceTest extends Assert {
     CashbackHackService service = new CashbackHackService();
 
-    @Test(description = "Проверка, что при сумме трат 1 рубль сервис напоминает потратить 999р")
+    @Test
     public void shouldRemainIfSumIsOneRuble() {
         int actual = 999;
         int expected = service.remain(1);
         assertEquals(actual, expected);
     }
 
-    @Test(expectedExceptions = RuntimeException.class,
-            description = "Если трат не было (сумма трат - 0), сервис ничего не рекомендует или выбрасывает ошибку")
+    @Test(expected = RuntimeException.class)
     public void shouldNotRemainIfSumIsZero() throws RuntimeException {
         service.remain(0);
     }
 
-    @Test(expectedExceptions = RuntimeException.class,
-            description = "Сервис не должен принимать сумму меньше нуля")
+    @Test(expected = RuntimeException.class)
     public void shouldThrowExceptionIfSumLessZero() throws RuntimeException {
         service.remain(-1);
     }
 
-    @Test(description = "Должен выдавать правильную рекомендованную сумму, если сумма покупки меньше первого кэшбека - 1000 руб")
+    @Test
     public void shouldRemainIfSumIsLessFirstCashbackStep() {
         int actual = service.remain(541);
         int expected = 459;
         assertEquals(actual, expected);
     }
 
-    @Test(description = "Должен рекомендовать потратить 1р, если не хватает рубля до суммы кэшбека")
+    @Test
     public void shouldRemainIfSumIfBoundaryOneRubleBeforeCashback() {
         int actual = service.remain(999);
         int expected = 1;
         assertEquals(actual, expected);
     }
 
-    @Test(expectedExceptions = RuntimeException.class,
-            description = "Сервис не должен рекомендовать докупить на 1000р, если сумма равна кэшбеку")
+    @Test(expected = RuntimeException.class)
     public void shouldNotRemainIfSumIsEqualCashbackSum() throws RuntimeException {
         service.remain(1000);
     }
 
-    @Test(description = "Сервис должен рекомендовать правильную сумму, если купили на 1р больше первого порога кэшбека")
+    @Test
     public void shouldRemainIfSumIsBoundaryFirstCashbackPlusOne() {
         int actual = service.remain(1001);
         int expected = 999;
         assertEquals(actual, expected);
     }
 
-    @Test(description = "Сервис должен при любой сумме после первого порога кэшбека предлагать округлить до следующего порога")
+    @Test
     public void shouldRemainIfSumIsMoreThanFirstCashback() {
         int actual = service.remain(2015);
         int expected = 985;
         assertEquals(actual, expected);
     }
 
-    @Test(expectedExceptions = RuntimeException.class,
-            description = "После первого порога кэшбека в 1000р на следующих порогах кэшбека (2000, 3000 и тп) сервис не" +
-                    "должен предлагать потратить еще")
+    @Test(expected = RuntimeException.class)
     public void shouldNotRemainIfSumIsEqualOneOfCashbackStep() {
         service.remain(2000);
     }
