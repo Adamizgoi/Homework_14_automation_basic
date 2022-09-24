@@ -1,6 +1,5 @@
 package ru.netology.service;
 
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 
@@ -15,19 +14,19 @@ public class CashbackHackServiceTest extends Assertion {
     }
 
     @Test(expectedExceptions = RuntimeException.class,
-          description = "Если трат не было (сумма трат - 0), сервис ничего не рекомендует или выбрасывает ошибку")
+            description = "Если трат не было (сумма трат - 0), сервис ничего не рекомендует или выбрасывает ошибку")
     public void shouldNotRemainIfSumIsZero() throws RuntimeException {
         service.remain(0);
     }
 
     @Test(expectedExceptions = RuntimeException.class,
-          description = "Сервис не должен принимать сумму меньше нуля")
+            description = "Сервис не должен принимать сумму меньше нуля")
     public void shouldThrowExceptionIfSumLessZero() throws RuntimeException {
         service.remain(-1);
     }
 
-    @Test(description = "Должен выдавать правильноую рекомендованную сумму, если сумма покупки меньше первого кэшбека - 1000 руб")
-    public void shouldRemainIfSumIsLessFirshCashback() {
+    @Test(description = "Должен выдавать правильную рекомендованную сумму, если сумма покупки меньше первого кэшбека - 1000 руб")
+    public void shouldRemainIfSumIsLessFirstCashbackStep() {
         int actual = service.remain(541);
         int expected = 459;
         assertEquals(actual, expected);
@@ -41,7 +40,7 @@ public class CashbackHackServiceTest extends Assertion {
     }
 
     @Test(expectedExceptions = RuntimeException.class,
-          description = "Сервис не должен рекомендовать докупить на 1000р, если сумма равна кэшбеку")
+            description = "Сервис не должен рекомендовать докупить на 1000р, если сумма равна кэшбеку")
     public void shouldNotRemainIfSumIsEqualCashbackSum() throws RuntimeException {
         service.remain(1000);
     }
@@ -61,8 +60,8 @@ public class CashbackHackServiceTest extends Assertion {
     }
 
     @Test(expectedExceptions = RuntimeException.class,
-          description = "После первого порога кэшбека в 1000р на следующих порогах кэшбека (2000, 3000 и тп) сервис не" +
-          "должен предлагать потратить еще")
+            description = "После первого порога кэшбека в 1000р на следующих порогах кэшбека (2000, 3000 и тп) сервис не" +
+                    "должен предлагать потратить еще")
     public void shouldNotRemainIfSumIsEqualOneOfCashbackStep() {
         service.remain(2000);
     }
