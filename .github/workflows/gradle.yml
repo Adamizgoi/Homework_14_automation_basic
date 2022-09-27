@@ -7,8 +7,12 @@
 
 name: Java CI with Gradle
 
-on: [push, pull_request]
-
+on:
+  push:
+    branches: [ "main", "junit4-platform", "junit4", "testing" ]
+  pull_request:
+    branches: [ "main", "junit4-platform", "junit4", "testing" ]
+    
 jobs:
   build:
 
